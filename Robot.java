@@ -54,7 +54,7 @@ public class Robot {
         System.out.println("Should I continue searching?");
         Scanner input = new Scanner(System.in);
         Continue = input.nextLine();
-       } while (0 != pixel % 2 || hitsDone < 4 || Continue == "Yes");
+       } while (0 != pixel % 2 && hitsDone < 4 && Continue == "Yes");
     }
     public static void batteryCheck(int batteryLevel ){
         switch (batteryLevel){

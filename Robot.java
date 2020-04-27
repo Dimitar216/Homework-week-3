@@ -1,60 +1,73 @@
-package com.robot;
 import java.util.Scanner;
-import java.util.concurrent.ThreadLocalRandom;
 public class Robot {
     public static void main(String[] args) {
-        battleSystem();
-    }
-    public static void objectDetection(){
-        Scanner objectInput = new Scanner(System.in);
-        System.out.println("What is in front of you? ");
-        String object = objectInput.nextLine();
-        switch (object) {
-            case "Chair":
-                System.out.println("Jump");
-                break;
-            case "Wall":
-                System.out.println("Go sideways");
-                break;
-            case "Nothing":
-                System.out.println("Foward");
-                break;
-            default:
-                System.out.println("Insert an object");
+        battleSys();
+            int hitsDone = 0;
+            do{
+                if (hitsDone < 4){
+                    System.out.println("Attack commencing!");
+                    int hitChance = (int) Math.round(Math.random() * 10);
+                    if (hitChance == 5) {
+                        System.out.println("The strike will harm the furniture");
+                        battleSys();
+                    } else {
+                        System.out.println("Target terminated");
+                        robotTalks();
+                        ++hitsDone;
+                        batteryCheck(hitsDone);
+                        System.out.println(hitsDone);
+                        battleSys();
+                    }
+                } else if (hitsDone == 4){
+                    System.out.println("No more battery remains please charge");
+                    outlet();
+                    hitsDone=hitsDone-4;
+                }
+            }while(hitsDone <=4);
         }
+
+    public static void objectInput() {
+        String object;
+        Scanner objectConsole = new Scanner(System.in);
+        System.out.println("What is in front of the robot?(Chair/Wall/Nothing)");
+        object = objectConsole.nextLine();
+        if (object.equals("Chair")) {
+            System.out.println("Jump");
+        } else if (object.equals("Wall")) {
+            System.out.println("Go sideways");
+        } else if (object.equals("Nothing")) {
+            System.out.println("Continue");
+        } else System.out.println("Invalid object");
     }
-    public static void battleSystem(){
-        int hitsDone = 0, pixel;
-        String Continue;
-       do{
-           objectDetection();
+
+    public static void battleSys() {
+        objectInput();
         Scanner pixelInput = new Scanner(System.in);
         System.out.println("Insert the number of pixels ");
-        pixel = pixelInput.nextInt();
-        if( pixel % 2 == 0){
-            System.out.println("Target acquired ");
-            batteryCheck(hitsDone);
-            if(hitsDone <4) {
-                int Strike = ThreadLocalRandom.current().nextInt(0, 10);
-                if (Strike == 5) {
-                    System.out.println("Can't successfully hit without damaging the furniture ");
-                } else {
-                    System.out.println("Mouse has been terminated");
-                    hitsDone++;
-                    batteryRemainingCheck(hitsDone);
-                    robotTalks();
-                }
-            }else {
-                System.out.println("No battery");
-                chargingOutlet();
-            }
-
+        int pixel = pixelInput.nextInt();
+        if (pixel % 2 == 0) {
+            System.out.println("Mouse has been found");
+        } else {
+            System.out.println("No mouse found");
+            battleSys();
         }
-        else System.out.println("No mouse found");
-        System.out.println("Should I continue searching?");
-        Scanner input = new Scanner(System.in);
-        Continue = input.nextLine();
-       } while (0 != pixel % 2 && hitsDone < 4 && Continue == "Yes");
+    }
+    public static void outlet(){
+        int chargeRoll1 = (int)Math.round(Math.random() * 1000);
+        int chargeRoll2 = (int)Math.round(Math.random() * 1000);
+        System.out.println(chargeRoll1);
+        System.out.println(chargeRoll2);
+        if(chargeRoll1>chargeRoll2){
+            System.out.println("Charge is available");
+            battleSys();
+        } else if (chargeRoll1 == chargeRoll2){
+            System.out.println("Repeat");
+            outlet();
+        } else {
+            System.out.println("No charge available");
+            System.out.println("Locating another outlet...");
+            outlet();
+        }
     }
     public static void batteryCheck(int batteryLevel ){
         switch (batteryLevel){
@@ -70,45 +83,10 @@ public class Robot {
             case 3:
                 System.out.println("Battery for 1 strikes remaining");
                 break;
-            default:
+            case 4:
                 System.out.println("No battery remains");
                 break;
         }
-    }
-    public static void batteryRemainingCheck(int remainingBattery){
-        switch (remainingBattery){
-            case 0:
-                System.out.println("Battery for 4 strikes remaining");
-                break;
-            case 1:
-                System.out.println("Battery for 3 strikes remaining");
-                break;
-            case 2:
-                System.out.println("Battery for 2 strikes remaining");
-                break;
-            case 3:
-                System.out.println("Battery for 1 strikes remaining");
-                break;
-            default:
-                System.out.println("No battery remains");
-                break;
-    }
-}
-    public static void chargingOutlet(){
-        int chargeValue1;
-        int chargeValue2;
-        do {
-            chargeValue1 = ThreadLocalRandom.current().nextInt(0, 1000);
-            chargeValue2 = ThreadLocalRandom.current().nextInt(0, 1000);
-            System.out.println(chargeValue1+ " "+ chargeValue2);
-            if (chargeValue1 > chargeValue2) {
-                System.out.println("Charge is available");
-            }
-            else if(chargeValue1==chargeValue2){
-                System.out.println("Try another outlet");
-            }
-            else System.out.println("No charge is available");
-        }while (chargeValue1==chargeValue2);
     }
     public static void robotTalks(){
         int robotCount = 10;

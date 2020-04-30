@@ -2,7 +2,7 @@ import java.util.Scanner;
 public class Robot {
     public static void main(String[] args) {
         battleSys();
-            int hitsDone = 0;
+            byte hitsDone = 0;
             do{
                 if (hitsDone < 4){
                     System.out.println("Attack commencing!");
@@ -21,7 +21,7 @@ public class Robot {
                 } else if (hitsDone == 4){
                     System.out.println("No more battery remains please charge");
                     outlet();
-                    hitsDone=hitsDone-4;
+                    hitsDone= (byte) (hitsDone-4);
                 }
             }while(hitsDone <=4);
         }
@@ -37,14 +37,17 @@ public class Robot {
             System.out.println("Go sideways");
         } else if (object.equals("Nothing")) {
             System.out.println("Continue");
-        } else System.out.println("Invalid object");
+        } else {
+            System.out.println("Invalid object");
+            objectInput();
+        }
     }
 
     public static void battleSys() {
         objectInput();
         Scanner pixelInput = new Scanner(System.in);
         System.out.println("Insert the number of pixels ");
-        int pixel = pixelInput.nextInt();
+        double pixel = pixelInput.nextDouble();
         if (pixel % 2 == 0) {
             System.out.println("Mouse has been found");
         } else {
@@ -69,7 +72,7 @@ public class Robot {
             outlet();
         }
     }
-    public static void batteryCheck(int batteryLevel ){
+    public static void batteryCheck(byte batteryLevel ){
         switch (batteryLevel){
             case 0:
                 System.out.println("Battery for 4 strikes remaining");
@@ -89,7 +92,7 @@ public class Robot {
         }
     }
     public static void robotTalks(){
-        int robotCount = 10;
+        byte robotCount = 10;
         while(robotCount > 0){
             if(robotCount % 2 == 0){
                 System.out.println("I am a Robottttt "+ robotCount);
